@@ -1,41 +1,51 @@
-import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium import webdriver
 from bs4 import BeautifulSoup
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+import requests
 
-# Giriş bilgileri
-url = 'https://merchant.hepsiburada.com/v2/login?returnUrl=%2F'  # Giriş sayfasının URL'si
-username = 'tekinhasan73@hotmail.com'
-password = 'Hasan5324847381_T'
-base_url = 'https://merchant.hepsiburada.com'  # Ana URL
-
-# Giriş yapma işlemi
-session = requests.Session()
-login_payload = {'username': username, 'password': password}
-session.post(url, data=login_payload)
-
-## Muhasebe sayfasına yönlendirme
-response = session.get(base_url + '/muhasebe')
-
-# Muhasebe sayfasını işle
-soup = BeautifulSoup(response.content, 'html.parser')
-
-# Muhasebe butonunu bulma
-muhasebe_butonu = soup.find('a', class_='sub', string='Muhasebe')
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver.maximize_window()
+driver.get('https://merchant.hepsiburada.com/v2/login?returnUrl=%2F')
 
 
-# Muhasebe butonu var mı diye kontrol etme
-if muhasebe_butonu is not None:
-    muhasebe_butonu.click()
-    print("Muhasebe butonuna tıklandı.")
+try:
+    # Kullanıcı adı alanını bulana kadar 10 saniye bekleyecek
+    username = WebDriverWait(driver, 30).until(
+        EC.presence_of_element_located((By.ID, 'username'))
+    )
+    username.send_keys('tekinhasan73@hotmail.com')
 
-    # Kayıtlar ve Faturalar metnini içeren etiketi bulma
-    kayitlar_faturalar_etiketi = soup.find('p', class_='des', text='Faaliyetlerinize ait tüm kayıtlar ve faturalar')
+    password = WebDriverWait(driver,timeout=30).until(
+        EC.presence_of_element_located((By.ID, 'password'))
+    )
+    password.send_keys("Hasan5324847381_T")
+    driver.find_element(By.ID, 'merchant-sign-in-button').click()
+except Exception as e:
+    print(f'Hata: {e}')
 
-    # Eğer etiket bulunduysa devam et
-    if kayitlar_faturalar_etiketi is not None:
-        kayitlar_faturalar_etiketi.parent.click()  # Ebeveyn etikete tıklama işlemi
-        print("Kayıtlar ve Faturalar butonuna tıklandı.")
-    else:
-        print("Kayıtlar ve Faturalar butonu bulunamadı.")
 
-else:
-    print("Muhasebe butonu bulunamadı.")
+'''
+username = driver.find_element(By.ID,'username')
+password = driver.find_element(By.ID,'password')
+username.send_keys('tekinhasan73@hotmail.com')
+password.send_keys('Hasan5324847381_T')
+
+
+
+
+'''
+driver.get('https://merchant.hepsiburada.com/v2/login?returnUrl=%2F')
+html = driver.page_source
+
+#soup = BeautifulSoup(html, 'html.parser')
+
+while True:
+    continue
+# Tarayıcıyı kapatma
+driver.quit()
