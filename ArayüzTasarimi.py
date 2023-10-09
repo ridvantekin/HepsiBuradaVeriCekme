@@ -2,6 +2,10 @@ import tkinter
 from PIL import ImageTk
 from PIL import Image
 from tkinter import messagebox
+from main import WebIslemleri
+from main import  cözümlemeİslemi
+
+
 
 
 def sifremiUnuttum():
@@ -12,7 +16,7 @@ def giris_kontrol():
     girilen_sifre = passwordEntry.get()
 
     # Kullanıcı adı ve şifreyi kontrol et
-    if girilen_kullanici_adi == "a" and girilen_sifre == "a" and len(girilen_sifre) != 0 and len(girilen_sifre) != 0:
+    if girilen_kullanici_adi == "banyohastanesi" and girilen_sifre == "123456" and len(girilen_sifre) != 0 and len(girilen_sifre) != 0:
         giris_ekrani.destroy()
         ArayuzEkrani()
 
@@ -57,7 +61,22 @@ def ArayuzEkrani():
     anaEkranBilgiBtn.place(x=257, y=25)
 
     anaEkranIndirBtn = tkinter.Button()
-    
+    anaEkranIndirBtn.config(text="İNDİR",
+                            bg="orange",
+                            command=WebIslemleri,
+                            font=("Times New Roman", 17,"bold"),
+                            width=18,
+                            height=3)
+    anaEkranIndirBtn.place(x=320, y=260)
+
+    anaEkranCzmleBtn = tkinter.Button()
+    anaEkranCzmleBtn.config(text="ÇÖZÜMLE",
+                            bg="orange",
+                            command=cözümlemeİslemi,
+                            font=("Times New Roman", 17,"bold"),
+                            width=18,
+                            height=3)
+    anaEkranCzmleBtn.place(x=320, y=390)
 
 
 
